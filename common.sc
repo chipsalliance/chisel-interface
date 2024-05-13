@@ -1,8 +1,7 @@
 import mill._
 import mill.scalalib._
 
-trait HasChisel
-  extends ScalaModule {
+trait HasChisel extends ScalaModule {
   // Define these for building chisel from source
   def chiselModule: Option[ScalaModule] = None
 
@@ -10,9 +9,15 @@ trait HasChisel
 
   def chiselPluginJar: T[Option[PathRef]] = None
 
-  override def scalacOptions = T(super.scalacOptions() ++ chiselPluginJar().map(path => s"-Xplugin:${path.path}") ++ Seq("-Ymacro-annotations"))
+  override def scalacOptions = T(
+    super.scalacOptions() ++ chiselPluginJar().map(path =>
+      s"-Xplugin:${path.path}"
+    ) ++ Seq("-Ymacro-annotations")
+  )
 
-  override def scalacPluginClasspath: T[Agg[PathRef]] = T(super.scalacPluginClasspath() ++ chiselPluginJar())
+  override def scalacPluginClasspath: T[Agg[PathRef]] = T(
+    super.scalacPluginClasspath() ++ chiselPluginJar()
+  )
 
   // Define these for building chisel from ivy
   def chiselIvy: Option[Dep] = None
@@ -21,10 +26,17 @@ trait HasChisel
 
   def chiselPluginIvy: Option[Dep] = None
 
-  override def scalacPluginIvyDeps: T[Agg[Dep]] = T(super.scalacPluginIvyDeps() ++ chiselPluginIvy.map(Agg(_)).getOrElse(Agg.empty[Dep]))
+  override def scalacPluginIvyDeps: T[Agg[Dep]] = T(
+    super.scalacPluginIvyDeps() ++ chiselPluginIvy
+      .map(Agg(_))
+      .getOrElse(Agg.empty[Dep])
+  )
 }
 
-trait DWBBModule extends HasChisel {
+trait ChiselInterfaceModule extends HasChisel {
+  // Use for elaboration.
   def mainargsIvy: Dep
   override def ivyDeps = T(super.ivyDeps() ++ Some(mainargsIvy))
 }
+
+trait DWBBModule extends ChiselInterfaceModule
