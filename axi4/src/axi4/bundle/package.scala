@@ -2,6 +2,8 @@
 // SPDX-FileCopyrightText: 2024 Jiuyang Liu <liu@jiuyang.me>
 package org.chipsalliance.amba.axi4
 
+import chisel3.{Const, fromBooleanToLiteral, fromIntToLiteral, fromIntToWidth, fromStringToLiteral}
+
 package object bundle {
   object verilog {
     object irrevocable {
@@ -19,6 +21,112 @@ package object bundle {
         else if (parameter.isRO) new AXI4ROIrrevocable(parameter)
         else new AXI4WOIrrevocable(parameter)
       }
+    }
+  }
+
+  object enum {
+    /** Table A3-3 Burst type encoding */
+    object burst {
+      /** In a fixed burst:
+        *   - The address is the same for every transfer in the burst.
+        *   - The byte lanes that are valid are constant for all beats in the
+        *     burst. However, within those byte lanes, the actual bytes that
+        *     have WSTRB asserted can differ for each beat in the burst.
+        *
+        * This burst type is used for repeated accesses to the same location
+        * such as when loading or emptying a FIFO.
+        */
+      val FIXED = Const(0.U(2.W))
+
+      /** Incrementing. In an incrementing burst, the address for each transfer
+        * in the burst is an increment of the address for the previous transfer.
+        * The increment value depends on the size of the transfer. For example,
+        * for an aligned start address, the address for each transfer in a burst
+        * with a size of 4 bytes is the previous address plus four. This burst
+        * type is used for accesses to normal sequential memory.
+        */
+      val INCR = Const(1.U(2.W))
+
+      /** A wrapping burst is similar to an incrementing burst, except that the
+        * address wraps around to a lower address if an upper address limit is
+        * reached. The following restrictions apply to wrapping bursts:
+        *   - The start address must be aligned to the size of each transfer.
+        *   - The length of the burst must be 2, 4, 8, or 16 transfers. The
+        * behavior of a wrapping burst is:
+        *
+        *   - The lowest address that is used by the burst is aligned to the
+        * total size of the data to be transferred, that is, to ((size of each
+        * transfer in the burst) × (number of transfers in the burst)). This
+        * address is defined as the wrap boundary.
+        *   - After each transfer, the address increments in the same way as for
+        * an INCR burst. However, if this incremented address is ((wrap
+        * boundary) + (total size of data to be transferred)), then the address
+        * wraps round to the wrap boundary.
+        *   - The first transfer in the burst can use an address that is higher
+        * than the wrap boundary, subject to the restrictions that apply to
+        * wrapping bursts. The address wraps for any WRAP burst when the first
+        * address is higher than the wrap boundary.
+        *
+        * This burst type is used for cache line accesses.
+        */
+      val WARP = Const(2.U(2.W))
+    }
+
+    /** Table A7-2 AXI4 atomic access encoding */
+    object lock {
+      val NormalAccess = Const(0.U(1.W))
+      val ExclusiveAccess = Const(0.U(1.W))
+    }
+
+    /** Table A4-5 Memory type encoding */
+    object cache {
+      val DeviceNonbufferable = Const("0b0000".U(4.W))
+      val DeviceBufferable = Const("0b0001".U(4.W))
+      val NormalNoncacheableNonbufferable = Const("0b0010".U(4.W))
+      val NormalNoncacheableBufferable = Const("0b0011".U(4.W))
+      val WriteThroughReadWriteAllocate = Const("0b1110".U(4.W))
+      val WriteBackReadWriteAllocate = Const("0b1111".U(4.W))
+      object ar {
+        val DeviceNonbufferable = cache.DeviceNonbufferable
+        val DeviceBufferable = cache.DeviceBufferable
+        val NormalNoncacheableNonbufferable = cache.NormalNoncacheableNonbufferable
+        val NormalNoncacheableBufferable = cache.NormalNoncacheableBufferable
+        val WriteThroughNoAllocate = Const("0b1010".U(4.W))
+        val WriteThroughReadAllocate = Const("0b1110".U(4.W))
+        val WriteThroughWriteAllocate = Const("0b1010".U(4.W))
+        val WriteThroughReadWriteAllocate = cache.WriteThroughReadWriteAllocate
+        val WriteBackNoAllocate = Const("0b1011".U(4.W))
+        val WriteBackReadAllocate = Const("0b1111".U(4.W))
+        val WriteBackWriteAllocate = Const("0b1011".U(4.W))
+        val WriteBackReadWriteAllocate = cache.WriteBackReadWriteAllocate
+      }
+      object aw {
+        val DeviceNonbufferable = cache.DeviceNonbufferable
+        val DeviceBufferable = cache.DeviceBufferable
+        val NormalNoncacheableNonbufferable = cache.NormalNoncacheableNonbufferable
+        val NormalNoncacheableBufferable = cache.NormalNoncacheableBufferable
+        val WriteThroughNoAllocate = Const("0b0110".U(4.W))
+        val WriteThroughReadAllocate = Const("0b0110".U(4.W))
+        val WriteThroughWriteAllocate = Const("0b1110".U(4.W))
+        val WriteThroughReadWriteAllocate = cache.WriteThroughReadWriteAllocate
+        val WriteBackNoAllocate = Const("0b0111".U(4.W))
+        val WriteBackReadAllocate = Const("0b0111".U(4.W))
+        val WriteBackWriteAllocate = Const("0b1111".U(4.W))
+        val WriteBackReadWriteAllocate = cache.WriteBackReadWriteAllocate
+      }
+    }
+
+    /** Table A4-6 Protection encoding
+      * @note
+      * the chisel type of prot should be Vec(3, Bool()) for better assignment.
+      */
+    object prot {
+      val UnprivilegedAccess = Const(false.B)
+      val PrivilegedAccess = Const(true.B)
+      val SecureAccess = Const(false.B)
+      val NonSecureAccess = Const(true.B)
+      val DataAccess = Const(false.B)
+      val InstructionAccess = Const(true.B)
     }
   }
 

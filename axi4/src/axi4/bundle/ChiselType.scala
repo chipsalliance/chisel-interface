@@ -15,6 +15,7 @@ class AW(val parameter: AXI4BundleParameter) extends AXI4ChiselBundle {
   val burst: UInt = UInt(2.W)
   val lock: Bool = Bool()
   val cache: UInt = UInt(4.W)
+  // @todo: should prot expose as three different field?
   val prot: UInt = UInt(3.W)
   val qos: UInt = UInt(4.W)
   val region: UInt = UInt(4.W)
@@ -42,6 +43,7 @@ class AR(val parameter: AXI4BundleParameter) extends AXI4ChiselBundle {
   val burst: UInt = UInt(2.W)
   val lock: Bool = Bool()
   val cache: UInt = UInt(4.W)
+  // @todo: should prot expose as three different field?
   val prot: UInt = UInt(3.W)
   val qos: UInt = UInt(4.W)
   val region: UInt = UInt(4.W)
