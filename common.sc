@@ -44,3 +44,5 @@ trait DWBBModule extends ChiselInterfaceModule
 trait AXI4Module extends ChiselInterfaceModule
 
 trait JTAGModule extends ChiselInterfaceModule
+
+trait SDRAMModule extends ChiselInterfaceModule

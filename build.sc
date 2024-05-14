@@ -73,3 +73,15 @@ object jtag
   def chiselPluginIvy = Some(v.chiselPlugin)
   def mainargsIvy = v.mainargs
 }
+
+object sdram
+  extends common.SDRAMModule
+    with ScalafmtModule
+    with ChiselInterfacePublishModule {
+  m =>
+  def millSourcePath = os.pwd / "sdram"
+  def scalaVersion = T(v.scala)
+  def chiselIvy = Some(v.chisel)
+  def chiselPluginIvy = Some(v.chiselPlugin)
+  def mainargsIvy = v.mainargs
+}
