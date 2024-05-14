@@ -44,7 +44,18 @@ package object bundle {
       hasW: Boolean,
       hasB: Boolean,
       hasAR: Boolean,
-      hasR: Boolean
+      hasR: Boolean,
+      supportId: Boolean,
+      supportRegion: Boolean,
+      supportLen: Boolean,
+      supportSize: Boolean,
+      supportBurst: Boolean,
+      supportLock: Boolean,
+      supportCache: Boolean,
+      supportQos: Boolean,
+      supportStrb: Boolean,
+      supportResp: Boolean,
+      supportProt: Boolean
   ) {
     val isRW: Boolean = hasAW && hasW && hasB && hasAR && hasR
     val isRO: Boolean = !isRW && hasAR && hasR
@@ -93,6 +104,18 @@ package object bundle {
     val bUserWidth: Int = parameter.bUserWidth
     val arUserWidth: Int = parameter.arUserWidth
     val rUserWidth: Int = parameter.rUserWidth
+    // @todo these are parameters for [[HasCustomConnectable]] API
+    val supportId: Boolean = parameter.supportId
+    val supportRegion: Boolean = parameter.supportRegion
+    val supportLen: Boolean = parameter.supportLen
+    val supportSize: Boolean = parameter.supportSize
+    val supportBurst: Boolean = parameter.supportBurst
+    val supportLock: Boolean = parameter.supportLock
+    val supportCache: Boolean = parameter.supportCache
+    val supportQos: Boolean = parameter.supportQos
+    val supportStrb: Boolean = parameter.supportStrb
+    val supportResp: Boolean = parameter.supportResp
+    val supportProt: Boolean = parameter.supportProt
   }
 
   implicit val rwV2C: chisel3.experimental.dataview.DataView[
