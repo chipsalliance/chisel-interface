@@ -49,3 +49,15 @@ object dwbb
   def chiselPluginIvy = Some(v.chiselPlugin)
   def mainargsIvy = v.mainargs
 }
+
+object axi4
+    extends common.AXI4Module
+    with ScalafmtModule
+    with ChiselInterfacePublishModule {
+  m =>
+  def millSourcePath = os.pwd / "axi4"
+  def scalaVersion = T(v.scala)
+  def chiselIvy = Some(v.chisel)
+  def chiselPluginIvy = Some(v.chiselPlugin)
+  def mainargsIvy = v.mainargs
+}
