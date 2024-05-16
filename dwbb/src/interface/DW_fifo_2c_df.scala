@@ -95,10 +95,12 @@ case class Parameter(
     case 4 => ramDepth + 1
     case 5 => ramDepth + 2
     case 6 => ramDepth + 2
+    case 7 => ramDepth + 3
     case _ => throw new IllegalArgumentException(s"Invalid memMode: $memMode")
   }
   val fifoWrdCnt: Int = log2Ceil(effDepth + 1)
-  val ramWrdCnt: Int = log2Ceil(ramDepth) + 1
+  val ramFlagWidth: Int = log2Ceil(ramDepth) + 1
+  val ramWrdCnt: Int = log2Ceil(ramDepth + 1)
 }
 
 class Interface(parameter: Parameter) extends Bundle {
@@ -106,8 +108,8 @@ class Interface(parameter: Parameter) extends Bundle {
   val rst_s_n: Bool = Input(Bool())
   val init_s_n: Bool = Input(Bool())
   val clr_s: Bool = Input(Bool())
-  val ae_level_s: UInt = Input(UInt(parameter.ramWrdCnt.W))
-  val af_level_s: UInt = Input(UInt(parameter.ramWrdCnt.W))
+  val ae_level_s: UInt = Input(UInt(parameter.ramFlagWidth.W))
+  val af_level_s: UInt = Input(UInt(parameter.ramFlagWidth.W))
   val push_s_n: Bool = Input(Bool())
   val data_s: UInt = Input(UInt(parameter.width.W))
   val clr_sync_s: Bool = Output(Bool())
@@ -126,8 +128,8 @@ class Interface(parameter: Parameter) extends Bundle {
   val rst_d_n: Bool = Input(Bool())
   val init_d_n: Bool = Input(Bool())
   val clr_d: Bool = Input(Bool())
-  val ae_level_d: UInt = Input(UInt(parameter.ramWrdCnt.W))
-  val af_level_d: UInt = Input(UInt(parameter.ramWrdCnt.W))
+  val ae_level_d: UInt = Input(UInt(parameter.ramFlagWidth.W))
+  val af_level_d: UInt = Input(UInt(parameter.ramFlagWidth.W))
   val pop_d_n: Bool = Input(Bool())
   val clr_sync_d: Bool = Output(Bool())
   val clr_in_prog_d: Bool = Output(Bool())
