@@ -2,7 +2,12 @@
 // SPDX-FileCopyrightText: 2024 Jiuyang Liu <liu@jiuyang.me>
 package org.chipsalliance.amba.axi4
 
-import chisel3.{Const, fromBooleanToLiteral, fromIntToLiteral, fromIntToWidth, fromStringToLiteral}
+import chisel3.{
+  fromBooleanToLiteral,
+  fromIntToLiteral,
+  fromIntToWidth,
+  fromStringToLiteral
+}
 
 package object bundle {
   object verilog {
@@ -25,8 +30,10 @@ package object bundle {
   }
 
   object enum {
+
     /** Table A3-3 Burst type encoding */
     object burst {
+
       /** In a fixed burst:
         *   - The address is the same for every transfer in the burst.
         *   - The byte lanes that are valid are constant for all beats in the
@@ -36,7 +43,7 @@ package object bundle {
         * This burst type is used for repeated accesses to the same location
         * such as when loading or emptying a FIFO.
         */
-      val FIXED = Const(0.U(2.W))
+      val FIXED = 0.U(2.W)
 
       /** Incrementing. In an incrementing burst, the address for each transfer
         * in the burst is an increment of the address for the previous transfer.
@@ -45,7 +52,7 @@ package object bundle {
         * with a size of 4 bytes is the previous address plus four. This burst
         * type is used for accesses to normal sequential memory.
         */
-      val INCR = Const(1.U(2.W))
+      val INCR = 1.U(2.W)
 
       /** A wrapping burst is similar to an incrementing burst, except that the
         * address wraps around to a lower address if an upper address limit is
@@ -69,64 +76,67 @@ package object bundle {
         *
         * This burst type is used for cache line accesses.
         */
-      val WARP = Const(2.U(2.W))
+      val WARP = 2.U(2.W)
     }
 
     /** Table A7-2 AXI4 atomic access encoding */
     object lock {
-      val NormalAccess = Const(0.U(1.W))
-      val ExclusiveAccess = Const(0.U(1.W))
+      val NormalAccess = 0.U(1.W)
+      val ExclusiveAccess = 0.U(1.W)
     }
 
     /** Table A4-5 Memory type encoding */
     object cache {
-      val DeviceNonbufferable = Const("0b0000".U(4.W))
-      val DeviceBufferable = Const("0b0001".U(4.W))
-      val NormalNoncacheableNonbufferable = Const("0b0010".U(4.W))
-      val NormalNoncacheableBufferable = Const("0b0011".U(4.W))
-      val WriteThroughReadWriteAllocate = Const("0b1110".U(4.W))
-      val WriteBackReadWriteAllocate = Const("0b1111".U(4.W))
+      val DeviceNonbufferable = "0b0000".U(4.W)
+      val DeviceBufferable = "0b0001".U(4.W)
+      val NormalNoncacheableNonbufferable = "0b0010".U(4.W)
+      val NormalNoncacheableBufferable = "0b0011".U(4.W)
+      val WriteThroughReadWriteAllocate = "0b1110".U(4.W)
+      val WriteBackReadWriteAllocate = "0b1111".U(4.W)
       object ar {
         val DeviceNonbufferable = cache.DeviceNonbufferable
         val DeviceBufferable = cache.DeviceBufferable
-        val NormalNoncacheableNonbufferable = cache.NormalNoncacheableNonbufferable
+        val NormalNoncacheableNonbufferable =
+          cache.NormalNoncacheableNonbufferable
         val NormalNoncacheableBufferable = cache.NormalNoncacheableBufferable
-        val WriteThroughNoAllocate = Const("0b1010".U(4.W))
-        val WriteThroughReadAllocate = Const("0b1110".U(4.W))
-        val WriteThroughWriteAllocate = Const("0b1010".U(4.W))
+        val WriteThroughNoAllocate = "0b1010".U(4.W)
+        val WriteThroughReadAllocate = "0b1110".U(4.W)
+        val WriteThroughWriteAllocate = "0b1010".U(4.W)
         val WriteThroughReadWriteAllocate = cache.WriteThroughReadWriteAllocate
-        val WriteBackNoAllocate = Const("0b1011".U(4.W))
-        val WriteBackReadAllocate = Const("0b1111".U(4.W))
-        val WriteBackWriteAllocate = Const("0b1011".U(4.W))
+        val WriteBackNoAllocate = "0b1011".U(4.W)
+        val WriteBackReadAllocate = "0b1111".U(4.W)
+        val WriteBackWriteAllocate = "0b1011".U(4.W)
         val WriteBackReadWriteAllocate = cache.WriteBackReadWriteAllocate
       }
       object aw {
         val DeviceNonbufferable = cache.DeviceNonbufferable
         val DeviceBufferable = cache.DeviceBufferable
-        val NormalNoncacheableNonbufferable = cache.NormalNoncacheableNonbufferable
+        val NormalNoncacheableNonbufferable =
+          cache.NormalNoncacheableNonbufferable
         val NormalNoncacheableBufferable = cache.NormalNoncacheableBufferable
-        val WriteThroughNoAllocate = Const("0b0110".U(4.W))
-        val WriteThroughReadAllocate = Const("0b0110".U(4.W))
-        val WriteThroughWriteAllocate = Const("0b1110".U(4.W))
+        val WriteThroughNoAllocate = "0b0110".U(4.W)
+        val WriteThroughReadAllocate = "0b0110".U(4.W)
+        val WriteThroughWriteAllocate = "0b1110".U(4.W)
         val WriteThroughReadWriteAllocate = cache.WriteThroughReadWriteAllocate
-        val WriteBackNoAllocate = Const("0b0111".U(4.W))
-        val WriteBackReadAllocate = Const("0b0111".U(4.W))
-        val WriteBackWriteAllocate = Const("0b1111".U(4.W))
+        val WriteBackNoAllocate = "0b0111".U(4.W)
+        val WriteBackReadAllocate = "0b0111".U(4.W)
+        val WriteBackWriteAllocate = "0b1111".U(4.W)
         val WriteBackReadWriteAllocate = cache.WriteBackReadWriteAllocate
       }
     }
 
     /** Table A4-6 Protection encoding
       * @note
-      * the chisel type of prot should be Vec(3, Bool()) for better assignment.
+      *   the chisel type of prot should be Vec(3, Bool()) for better
+      *   assignment.
       */
     object prot {
-      val UnprivilegedAccess = Const(false.B)
-      val PrivilegedAccess = Const(true.B)
-      val SecureAccess = Const(false.B)
-      val NonSecureAccess = Const(true.B)
-      val DataAccess = Const(false.B)
-      val InstructionAccess = Const(true.B)
+      val UnprivilegedAccess = false.B
+      val PrivilegedAccess = true.B
+      val SecureAccess = false.B
+      val NonSecureAccess = true.B
+      val DataAccess = false.B
+      val InstructionAccess = true.B
     }
   }
 
