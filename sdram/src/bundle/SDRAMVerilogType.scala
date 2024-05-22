@@ -17,7 +17,7 @@ import chisel3.{
   Flipped,
   Record,
   UInt,
-  VecInit,
+  Vec,
   fromIntToWidth
 }
 
@@ -125,7 +125,7 @@ class SDRAMChiselType(parameter: SDRAMParameter) extends Bundle {
   val dqo = UInt(parameter.dataWidth.W)
   val dqm = UInt((parameter.dataWidth / 8).W)
   val a = UInt(13.W)
-  val ck = VecInit.fill(parameter.csWidth)(Clock())
+  val ck = Vec(parameter.csWidth, Clock())
   val cs = UInt(parameter.csWidth.W)
   val cke = UInt(parameter.csWidth.W)
   val ba = UInt(2.W)
