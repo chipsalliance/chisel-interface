@@ -61,3 +61,15 @@ object axi4
   def chiselPluginIvy = Some(v.chiselPlugin)
   def mainargsIvy = v.mainargs
 }
+
+object jtag
+  extends common.JTAGModule
+    with ScalafmtModule
+    with ChiselInterfacePublishModule {
+  m =>
+  def millSourcePath = os.pwd / "jtag"
+  def scalaVersion = T(v.scala)
+  def chiselIvy = Some(v.chisel)
+  def chiselPluginIvy = Some(v.chiselPlugin)
+  def mainargsIvy = v.mainargs
+}
