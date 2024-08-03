@@ -4,9 +4,8 @@ package org.chipsalliance.jtag.bundle
 
 import chisel3.{Bool, Bundle}
 
-/** Know as cJTAG. refer to
-  * [[https://standards.ieee.org/ieee/1149.7/7703/]]
-  * for more information
+/** Know as cJTAG. refer to [[https://standards.ieee.org/ieee/1149.7/7703/]] for
+  * more information
   */
 class CompactJTAGVerilogBundle extends Bundle {
   val TMSC = Bool()

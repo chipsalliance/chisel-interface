@@ -13,21 +13,21 @@ object Parameter {
 }
 
 case class Parameter(
-                      width: Int = 8,
-                      ramDepth: Int = 8,
-                      retimingDataOut: Boolean = false,
-                      retimingReadAddr: Boolean = false,
-                      retimingWriteIF: Boolean = false,
-                      fSyncType: String = "pos_pos_sync",
-                      rSyncType: String = "pos_pos_sync",
-                      clkRatio: Int = 1,
-                      ramReExt: Boolean = false,
-                      errMode: Boolean = false,
-                      tstMode: String = "no_latch",
-                      verifEn: Int = 1,
-                      clrDualDomain: Boolean = true,
-                      archType: String = "rtl"
-                    ) extends SerializableModuleParameter {
+    width: Int = 8,
+    ramDepth: Int = 8,
+    retimingDataOut: Boolean = false,
+    retimingReadAddr: Boolean = false,
+    retimingWriteIF: Boolean = false,
+    fSyncType: String = "pos_pos_sync",
+    rSyncType: String = "pos_pos_sync",
+    clkRatio: Int = 1,
+    ramReExt: Boolean = false,
+    errMode: Boolean = false,
+    tstMode: String = "no_latch",
+    verifEn: Int = 1,
+    clrDualDomain: Boolean = true,
+    archType: String = "rtl"
+) extends SerializableModuleParameter {
   require(
     Range.inclusive(1, 1024).contains(width),
     "width must be between 1 and 1024"
