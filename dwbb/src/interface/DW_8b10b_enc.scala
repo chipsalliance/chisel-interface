@@ -37,8 +37,8 @@ class Interface(parameter: Parameter) extends Bundle {
   val init_rd_n: Bool = Input(Bool())
   val init_rd_val: Bool = Input(Bool())
   val k_char: UInt = Output(UInt(parameter.bytes.W))
-  val data_in: UInt = Input(UInt(parameter.bytes * 10.W))
+  val data_in: UInt = Input(UInt((parameter.bytes * 10).W))
   val rd: Bool = Output(Bool())
-  val data_out: UInt = Output(UInt(parameter.bytes * 8.W))
+  val data_out: UInt = Output(UInt((parameter.bytes * 8).W))
   val enable: Bool = Input(Bool())
 }

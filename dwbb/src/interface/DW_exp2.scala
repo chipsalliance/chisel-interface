@@ -33,5 +33,5 @@ case class Parameter(
 
 class Interface(parameter: Parameter) extends Bundle {
   val a: UInt = Input(UInt(parameter.opWidth.W))
-  val z: UInt = Input(UInt(parameter.opWidth.W))
+  val z: UInt = Output(UInt(parameter.opWidth.W))
 }
