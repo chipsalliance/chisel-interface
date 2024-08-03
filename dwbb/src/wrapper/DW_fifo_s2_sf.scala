@@ -22,14 +22,14 @@ class DW_fifo_s2_sf(parameter: Parameter)
           "pop_af_lvl" -> IntParam(p.popAFLvl),
           "err_mode" -> IntParam(if (p.errMode) 1 else 0),
           "push_sync" -> IntParam(p.pushSync match {
-            case "single_reg" => 0
-            case "double_reg" => 1
-            case "triple_reg" => 2
+            case "single_reg" => 1
+            case "double_reg" => 2
+            case "triple_reg" => 3
           }),
           "pop_sync" -> IntParam(p.popSync match {
-            case "single_reg" => 0
-            case "double_reg" => 1
-            case "triple_reg" => 2
+            case "single_reg" => 1
+            case "double_reg" => 2
+            case "triple_reg" => 3
           }),
           "rst_mode" -> IntParam(p.rstMode match {
             case "async_with_mem" => 0

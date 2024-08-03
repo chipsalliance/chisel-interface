@@ -25,5 +25,5 @@ class Interface(parameter: Parameter) extends Bundle {
   val b: UInt = Input(UInt(parameter.width.W))
   val tc: Bool = Input(Bool())
   val dplx: Bool = Input(Bool())
-  val product: UInt = Output(UInt(2 * parameter.width.W))
+  val product: UInt = Output(UInt((2 * parameter.width).W))
 }
