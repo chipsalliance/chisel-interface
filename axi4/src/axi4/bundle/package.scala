@@ -76,7 +76,7 @@ package object bundle {
         *
         * This burst type is used for cache line accesses.
         */
-      val WARP = 2.U(2.W)
+      val WRAP = 2.U(2.W)
     }
 
     /** Table A7-2 AXI4 atomic access encoding */
