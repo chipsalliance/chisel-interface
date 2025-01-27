@@ -3,7 +3,9 @@
   espresso = final.callPackage ./pkgs/espresso.nix { };
   circt-full = final.callPackage ./pkgs/circt-full.nix { };
   submodules = final.callPackage ./submodules.nix { };
+  chisel-snapshot = final.callPackage ./chisel-snapshot.nix { };
   chisel-interface = final.callPackage ./chisel-interface.nix { };
+  chisel-interface-snapshot = final.callPackage ./chisel-interface-snapshot.nix { };
   mill = prev.mill.overrideAttrs {
     version = "unstable-0.12.5-173-15dded";
     src = final.fetchurl {
