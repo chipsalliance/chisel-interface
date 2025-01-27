@@ -45,7 +45,8 @@ trait ChiselInterfacePublishModule
 
 trait DWBBPublishModule
     extends Cross.Module[String]
-    with common.DWBBModule {
+    with common.DWBBModule
+    with ChiselInterfacePublishModule {
   def scalaVersion = T(v.scala)
   def chiselIvy = Some(v.crossChiselVersions(crossValue)._1)
   def chiselPluginIvy = Some(v.crossChiselVersions(crossValue)._2)
@@ -59,7 +60,8 @@ object dwbb
 
 trait AXI4PublishModule
     extends Cross.Module[String]
-    with common.AXI4Module {
+    with common.AXI4Module
+    with ChiselInterfacePublishModule {
   def scalaVersion = T(v.scala)
   def chiselIvy = Some(v.crossChiselVersions(crossValue)._1)
   def chiselPluginIvy = Some(v.crossChiselVersions(crossValue)._2)
@@ -73,7 +75,8 @@ object axi4
 
 trait JTAGPublishModule
     extends Cross.Module[String]
-    with common.JTAGModule {
+    with common.JTAGModule
+    with ChiselInterfacePublishModule {
   def scalaVersion = T(v.scala)
   def chiselIvy = Some(v.crossChiselVersions(crossValue)._1)
   def chiselPluginIvy = Some(v.crossChiselVersions(crossValue)._2)

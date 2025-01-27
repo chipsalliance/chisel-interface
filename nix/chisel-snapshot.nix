@@ -8,12 +8,12 @@ let
     inherit fetchFromGitHub;
     fetchurl = null;
     fetchgit = null;
-    dokerTools = null;
+    dockerTools = null;
   }).chisel.src;
   chiselDeps = fetchMillDeps {
     name = "chisel-snapshot";
     src = chiselSrc;
-    millDepsHash = "";
+    millDepsHash = "sha256-NBHUq5MaGiiaDA5mjeP0xcU5jNe9wWordL01a6khy7I=";
   };
 in
 publishMillJar {
