@@ -1,3 +1,5 @@
+package build
+
 import $ivy.`com.lihaoyi::mill-contrib-versionfile:`
 import $ivy.`com.github.lolgab::mill-mima::0.0.23`
 
@@ -6,21 +8,24 @@ import mill.scalalib._
 import mill.define.{TaskModule, Command}
 import mill.scalalib.publish._
 import mill.scalalib.scalafmt._
-import $file.common
 import mill.contrib.versionfile.VersionFileModule
 import com.github.lolgab.mill.mima._
 
 object v {
-  val scala = "2.13.12"
-  val chiselPlugin = ivy"org.chipsalliance:::chisel-plugin:7.0.0-M1"
-  val chisel = ivy"org.chipsalliance::chisel:7.0.0-M1"
+  val scala = "2.13.15"
   val mainargs = ivy"com.lihaoyi::mainargs:0.7.0"
+  val crossChiselVersions = Map(
+    "6.6.0" -> (ivy"org.chipsalliance::chisel:6.6.0", ivy"org.chipsalliance:::chisel-plugin:6.6.0"),
+    "snapshot" -> (ivy"org.chipsalliance::chisel:0.0.0+0-no-vcs-SNAPSHOT", ivy"org.chipsalliance:::chisel-plugin:0.0.0+0-no-vcs-SNAPSHOT"),
+  )
 }
 
 trait ChiselInterfacePublishModule
     extends PublishModule
     with VersionFileModule
+    with ScalafmtModule
     with Mima {
+
   // Different artifacts has their own version for fine control of compatibility.
   def publishVersion: mill.T[String] = currentVersion().toString
   def pomSettings = T(
@@ -38,38 +43,43 @@ trait ChiselInterfacePublishModule
   )
 }
 
+trait DWBBPublishModule
+    extends Cross.Module[String]
+    with common.DWBBModule {
+  def scalaVersion = T(v.scala)
+  def chiselIvy = Some(v.crossChiselVersions(crossValue)._1)
+  def chiselPluginIvy = Some(v.crossChiselVersions(crossValue)._2)
+  def mainargsIvy = v.mainargs
+}
 object dwbb
-    extends common.DWBBModule
-    with ScalafmtModule
-    with ChiselInterfacePublishModule {
-  m =>
+    extends Cross[DWBBPublishModule](v.crossChiselVersions.keys.toSeq) { m =>
   def millSourcePath = os.pwd / "dwbb"
-  def scalaVersion = T(v.scala)
-  def chiselIvy = Some(v.chisel)
-  def chiselPluginIvy = Some(v.chiselPlugin)
-  def mainargsIvy = v.mainargs
 }
 
+
+trait AXI4PublishModule
+    extends Cross.Module[String]
+    with common.AXI4Module {
+  def scalaVersion = T(v.scala)
+  def chiselIvy = Some(v.crossChiselVersions(crossValue)._1)
+  def chiselPluginIvy = Some(v.crossChiselVersions(crossValue)._2)
+  def mainargsIvy = v.mainargs
+}
 object axi4
-    extends common.AXI4Module
-    with ScalafmtModule
-    with ChiselInterfacePublishModule {
-  m =>
+    extends Cross[AXI4PublishModule](v.crossChiselVersions.keys.toSeq) { m =>
   def millSourcePath = os.pwd / "axi4"
-  def scalaVersion = T(v.scala)
-  def chiselIvy = Some(v.chisel)
-  def chiselPluginIvy = Some(v.chiselPlugin)
-  def mainargsIvy = v.mainargs
 }
 
-object jtag
-  extends common.JTAGModule
-    with ScalafmtModule
-    with ChiselInterfacePublishModule {
-  m =>
-  def millSourcePath = os.pwd / "jtag"
+
+trait JTAGPublishModule
+    extends Cross.Module[String]
+    with common.JTAGModule {
   def scalaVersion = T(v.scala)
-  def chiselIvy = Some(v.chisel)
-  def chiselPluginIvy = Some(v.chiselPlugin)
+  def chiselIvy = Some(v.crossChiselVersions(crossValue)._1)
+  def chiselPluginIvy = Some(v.crossChiselVersions(crossValue)._2)
   def mainargsIvy = v.mainargs
+}
+object jtag
+    extends Cross[JTAGPublishModule](v.crossChiselVersions.keys.toSeq) { m =>
+  def millSourcePath = os.pwd / "jtag"
 }
