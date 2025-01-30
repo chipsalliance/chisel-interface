@@ -2,13 +2,14 @@ package build
 
 import $ivy.`com.lihaoyi::mill-contrib-versionfile:`
 import $ivy.`com.github.lolgab::mill-mima::0.0.23`
+import $ivy.`de.tototec::de.tobiasroeser.mill.vcs.version::0.4.1`
 
 import mill._
 import mill.scalalib._
 import mill.define.{TaskModule, Command}
 import mill.scalalib.publish._
 import mill.scalalib.scalafmt._
-import mill.contrib.versionfile.VersionFileModule
+import de.tobiasroeser.mill.vcs.version.VcsVersion
 import com.github.lolgab.mill.mima._
 
 object v {
@@ -22,12 +23,17 @@ object v {
 
 trait ChiselInterfacePublishModule
     extends PublishModule
-    with VersionFileModule
     with ScalafmtModule
     with Mima {
 
   // Different artifacts has their own version for fine control of compatibility.
-  def publishVersion: mill.T[String] = currentVersion().toString
+  def publishVersion: mill.T[String] = VcsVersion
+      .vcsState()
+      .format(
+        countSep = "+",
+        revHashDigits = 8,
+        untaggedSuffix = "-SNAPSHOT",
+      )
   def pomSettings = T(
     PomSettings(
       description = artifactName(),

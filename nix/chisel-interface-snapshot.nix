@@ -1,4 +1,5 @@
 { lib
+, git
 , fetchMillDeps
 , publishMillJar
 , chisel-snapshot
@@ -18,7 +19,7 @@ let
     name = "chisel-interface-snapshot";
     src = chiselInterfaceSrc;
     buildInputs = [ chisel-snapshot.setupHook ];
-    millDepsHash = "sha256-53K85Of2kPaleNbuGPkaucN1fDHiHAG1+I76rTR5N+0=";
+    millDepsHash = "sha256-10fioZDAhLjx/ekdAJlyvqPUGeZ5InAl038JIL8lxw8=";
   };
 in
 publishMillJar {
@@ -26,17 +27,12 @@ publishMillJar {
 
   src = chiselInterfaceSrc;
 
+  nativeBuildInputs = [ git ];
+
   buildInputs = [
     chisel-snapshot.setupHook
     chiselInterfaceDeps.setupHook
   ];
-
-  preBuild = ''
-    _localVersion="0.1.0-SNAPSHOT"
-    echo "$_localVersion" > dwbb/version
-    echo "$_localVersion" > jtag/version
-    echo "$_localVersion" > axi4/version
-  '';
 
   publishTargets = [
     "dwbb[snapshot]"
