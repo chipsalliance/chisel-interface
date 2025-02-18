@@ -251,9 +251,9 @@ object AXI4ROIrrevocableVerilog {
     parameter
   )
   implicit val viewChisel: chisel3.experimental.dataview.DataView[
-    AXI4RWIrrevocableVerilog,
-    AXI4RWIrrevocable
-  ] = rwV2C
+    AXI4ROIrrevocableVerilog,
+    AXI4ROIrrevocable
+  ] = roV2C
 }
 
 /** A9.2.3 Write-only interface */
@@ -271,7 +271,7 @@ object AXI4WOIrrevocableVerilog {
     parameter
   )
   implicit val viewChisel: chisel3.experimental.dataview.DataView[
-    AXI4RWIrrevocableVerilog,
-    AXI4RWIrrevocable
-  ] = rwV2C
+    AXI4WOIrrevocableVerilog,
+    AXI4WOIrrevocable
+  ] = woV2C
 }
