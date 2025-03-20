@@ -6,11 +6,15 @@
   chisel-snapshot = final.callPackage ./chisel-snapshot.nix { };
   chisel-interface = final.callPackage ./chisel-interface.nix { };
   chisel-interface-snapshot = final.callPackage ./chisel-interface-snapshot.nix { };
-  mill = prev.mill.overrideAttrs {
-    version = "unstable-0.12.5-173-15dded";
-    src = final.fetchurl {
-      url = "https://github.com/com-lihaoyi/mill/releases/download/0.12.5/0.12.5-173-15dded-assembly";
-      hash = "sha256-xP59tONOu0CG5Gce4ru+st5KUH7Wcd10d/pQdELjSJM=";
+  mill = let jre = final.jdk21; in
+    (prev.mill.override { inherit jre; }).overrideAttrs rec {
+      # Fixed the buggy sorting issue in target resolve
+      version = "0.12.8-1-46e216";
+      src = final.fetchurl {
+        url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist/${version}/mill-dist-${version}-assembly.jar";
+        hash = "sha256-XNtl9NBQPlkYu/odrR/Z7hk3F01B6Rk4+r/8tMWzMm8=";
+      };
+      passthru = { inherit jre; };
     };
-  };
+  bump-chisel-interface = final.callPackage ./bump-lock.nix { };
 }

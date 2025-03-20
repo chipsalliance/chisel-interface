@@ -1,31 +1,18 @@
-{ fetchMillDeps
-, publishMillJar
+{ publishMillJar
 , fetchFromGitHub
 , git
 }:
-let
-  chiselSrc = ((import ./_sources/generated.nix) {
+publishMillJar {
+  name = "chisel-snapshot";
+  src = ((import ./_sources/generated.nix) {
     inherit fetchFromGitHub;
     fetchurl = null;
     fetchgit = null;
     dockerTools = null;
   }).chisel.src;
-  chiselDeps = fetchMillDeps {
-    name = "chisel-snapshot";
-    src = chiselSrc;
-    millDepsHash = "sha256-NBHUq5MaGiiaDA5mjeP0xcU5jNe9wWordL01a6khy7I=";
-  };
-in
-publishMillJar {
-  name = "chisel-snapshot";
-  src = chiselSrc;
 
   publishTargets = [
     "unipublish"
-  ];
-
-  buildInputs = [
-    chiselDeps.setupHook
   ];
 
   nativeBuildInputs = [
@@ -33,7 +20,5 @@ publishMillJar {
     git
   ];
 
-  passthru = {
-    inherit chiselDeps;
-  };
+  lockFile = ./chisel-mill-lock.nix;
 }
